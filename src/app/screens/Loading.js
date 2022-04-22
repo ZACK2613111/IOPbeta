@@ -5,7 +5,7 @@ export default function Loading({navigation}) {
     useEffect(()=>{
         setTimeout(()=>{
             navigation.replace("Home");
-        },4000)
+        },5000)
     },[])
 
   return (
