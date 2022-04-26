@@ -1,11 +1,9 @@
 import {View, StyleSheet, Image, Text, ScrollView, TouchableOpacity} from "react-native";
 import React from "react";
 
-import header from "../components/header";
-import COLORS from "../../consts/colors";
-import plants from "../../consts/plants";
 
-export default function myPlants() {
+
+export default function MyPlants() {
   return (
     // Header
     // Serach bar
@@ -13,7 +11,7 @@ export default function myPlants() {
     <View>
       <Text>myPlants</Text>
 
-      <ScrollView style={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scroll}>
         <View >
           <TouchableOpacity
             style={[styles.plantContainer]}
