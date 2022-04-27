@@ -17,6 +17,7 @@ import data from "../../data/plants";
 import COLORS from "../../data/colors"
 import {useState} from "react";
 import PlantCard from "../components/PlantCard";
+import Header from "../components/header"
 
 export default function MyPlants() {
   const [value, setValue] = useState("");
@@ -36,23 +37,10 @@ export default function MyPlants() {
             bg: "coolGray.200:alpha.20",
           }}
         >
-          <Fab
-            renderInPortal={false}
-            shadow={2}
-            placement="top-right"
-            size="sm"
-            icon={
-              <Icon
-                color="white"
-                as={MaterialIcons}
-                name="lightbulb"
-                size="4"
-              />
-            }
-            label="Quick Start"
-          />
+          
         </Box>
       </Center>
+
     );
   };
   const sortedFilteredPlants = () => {
@@ -75,13 +63,20 @@ export default function MyPlants() {
     <View
       style={{alignItems: "center", backgroundColor: "white", height: "100%"}}
     >
-      <View
+
+      {/*<View
         style={{
           height: (10 * Dimensions.get("screen").height) / 100,
           backgroundColor: "red",
           width: "100%",
         }}
-      ></View>
+      >
+        
+      </View>*/}
+      
+      <Header style={{ height: (10 * Dimensions.get("screen").height) / 100,width:"100%"}}/>
+
+      
       <View
         style={{
           height: (75 * Dimensions.get("screen").height) / 100,

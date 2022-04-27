@@ -6,20 +6,20 @@ const Weatherbar = () => {
     <View style={wstyle.wb}>
 
       <View style={wstyle.wbelem}>
-        <Image source={require('../assets/images/sun.png')} />
+        <Image source={require('../../assets/images/sun.png')} />
         <Text style={wstyle.wbtxt}>Day</Text>
       </View>
 
       <View style={wstyle.wbelem}>
-        <Image source={require('../assets/images/sun.png')} />
+        <Image source={require('../../assets/images/sun.png')} />
         <Text style={wstyle.wbtxt}>Day</Text>
       </View>
       <View style={wstyle.wbelem}>
-        <Image source={require('../assets/images/sun.png')} />
+        <Image source={require('../../assets/images/sun.png')} />
         <Text style={wstyle.wbtxt}>Day</Text>
       </View>
       <View style={wstyle.wbelem}>
-        <Image source={require('../assets/images/sun.png')} />
+        <Image source={require('../../assets/images/sun.png')} />
         <Text style={wstyle.wbtxt}>Day</Text>
       </View>
     </View>

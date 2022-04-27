@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {View,Text,StyleSheet} from 'react-native';
-import Weatherbar from '../../../Components/Weatherbar';
-import Donutchart from '../../../Components/Donutchart';
+import Weatherbar from '../components/Weatherbar';
+import Donutchart from '../components/Donutchart';
 
 
 export default function Screen1(){

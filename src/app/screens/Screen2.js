@@ -6,7 +6,7 @@ export default function Screen2(){
     return(
         <View style={{justifyContent:'center',flex:1,alignItems:'center'}}>
             <Text style={{fontSize:25}}>
-                heyyy 2
+                WATER
             </Text>
         </View>
     );

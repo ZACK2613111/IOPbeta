@@ -22,6 +22,7 @@ export default function MainContainer(){
             screenOptions={{
                 headerShown:false,
                 tabBarShowLabel: false,
+                tabBarHideOnKeyboard:true,
                 tabBarStyle:{height:80,borderTopLeftRadius:10,borderTopRightRadius:10,backgroundColor:'#0c0c0c',opacity:0.6}
             }}>
         
