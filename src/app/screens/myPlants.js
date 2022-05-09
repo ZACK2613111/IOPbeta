@@ -11,38 +11,16 @@ import {
   Pressable,
 } from "react-native";
 
-
-
 import data from "../../data/plants";
-import COLORS from "../../data/colors"
+import COLORS from "../../data/colors";
 import {useState} from "react";
 import PlantCard from "../components/PlantCard";
-import Header from "../components/header"
+import Header from "../components/header";
+import FloatingActionButton from "../components/FloatingActionButton";
 
 export default function MyPlants() {
   const [value, setValue] = useState("");
   const [plants, setPlants] = useState(data);
-  const Example = () => {
-    return (
-      <Center>
-        <Box
-          height="200"
-          w="400"
-          shadow="2"
-          rounded="lg"
-          _dark={{
-            bg: "coolGray.200:alpha.20",
-          }}
-          _light={{
-            bg: "coolGray.200:alpha.20",
-          }}
-        >
-          
-        </Box>
-      </Center>
-
-    );
-  };
   const sortedFilteredPlants = () => {
     let sortedPlant = plants;
     sortedPlant.sort((a, b) =>
@@ -61,25 +39,23 @@ export default function MyPlants() {
   };
   return (
     <View
-      style={{alignItems: "center", backgroundColor: "white", height: "100%"}}
+      style={{
+        alignItems: "center",
+        backgroundColor: "white",
+        height: "100%",
+        width: "100%",
+      }}
     >
-
-      {/*<View
+      <Header
         style={{
-          height: (10 * Dimensions.get("screen").height) / 100,
-          backgroundColor: "red",
+          height: (20 * Dimensions.get("screen").height) / 100,
           width: "100%",
         }}
-      >
-        
-      </View>*/}
-      
-      <Header style={{ height: (10 * Dimensions.get("screen").height) / 100,width:"100%"}}/>
+      />
 
-      
       <View
         style={{
-          height: (75 * Dimensions.get("screen").height) / 100,
+          height: (80 * Dimensions.get("screen").height) / 100,
           width: "80%",
         }}
       >
@@ -96,7 +72,7 @@ export default function MyPlants() {
               flexDirection: "row",
               alignItems: "center",
               borderColor: "#00000025",
-              borderWidth: 2,
+              borderWidth: 1,
               borderRadius: 20,
               flex: 1,
               marginRight: 5,
@@ -123,6 +99,7 @@ export default function MyPlants() {
           </Pressable>
         </View>
         <View style={{marginTop: 10, flex: 1, alignItems: "center"}}>
+          {/* Il faut faire le cas ou il reste juste un element dans la liste */}
           <FlatList
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
@@ -138,15 +115,9 @@ export default function MyPlants() {
               />
             )}
           />
+          <FloatingActionButton />
         </View>
       </View>
-      <View
-        style={{
-          height: (15 * Dimensions.get("screen").height) / 100,
-          backgroundColor: "green",
-          width: "100%",
-        }}
-      ></View>
     </View>
   );
 }
