@@ -12,7 +12,7 @@ export default function PlantCard({name, img, etat, deleteHandler, id}) {
         marginBottom: 10,
         marginHorizontal: "1%",
         overflow: "hidden",
-        // elevation: 10,
+        elevation: 10,
       }}
     >
       <Pressable
@@ -30,6 +30,7 @@ export default function PlantCard({name, img, etat, deleteHandler, id}) {
         </Text>
         <Text style={{fontWeight: "bold", color: "black"}}>Jasmine</Text>
         <Text style={{color: COLORS.GRAY, fontWeight: "600"}}>{etat}</Text>
+        <View style={{}}></View>
       </Pressable>
     </View>
   );
