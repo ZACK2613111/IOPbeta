@@ -1,7 +1,7 @@
-import {Image, Pressable, Text, View} from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import COLORS from "../../data/colors";
 
-export default function PlantCard({name, img, etat, deleteHandler, id}) {
+export default function PlantCard({ name, img, etat }) {
   return (
     <View
       style={{
@@ -16,20 +16,21 @@ export default function PlantCard({name, img, etat, deleteHandler, id}) {
       }}
     >
       <Pressable
-        onLongPress={() => deleteHandler(id)}
-        android_ripple={{color: "#000"}}
+        android_ripple={{ color: "#000" }}
         style={{
           alignItems: "center",
           backgroundColor: "white",
           padding: 5,
+          width: "100%"
         }}
       >
-        <Image source={img} />
-        <Text style={{color: COLORS.GREEN, fontWeight: "bold", fontSize: 16}}>
+        <Image resizeMode="contain" style={{ width: "100%", height: 100 }} source={{
+          uri: img,
+        }} />
+        <Text style={{ color: COLORS.GREEN, fontWeight: "bold", fontSize: 14 }}>
           {name}
         </Text>
-        <Text style={{fontWeight: "bold", color: "black"}}>Jasmine</Text>
-        <Text style={{color: COLORS.GRAY, fontWeight: "600"}}>{etat}</Text>
+        <Text style={{ color: COLORS.GRAY, fontWeight: "600" }}>{etat}</Text>
       </Pressable>
     </View>
   );

@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import MainContainer from './src/app/components/MainContainer'
+import Addplant from './src/app/screens/Addplant';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from 'react-navigation-stack';
+import LoginScreen from './src/app/screens/login';
+const Stack = createNativeStackNavigator();
 export default function App() {
 
   let [fontsLoaded] = useFonts({
@@ -10,7 +16,16 @@ export default function App() {
     'CircularStd-Medium': require('./src/assets/fonts/CircularStdMedium.ttf'),
   });
   return (
-    <MainContainer/>
+    // <MainContainer />
+
+
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name='Login' component={LoginScreen}  />
+        <Stack.Screen name='Main' component={MainContainer} />
+        <Stack.Screen name='Addplant' component={Addplant} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
