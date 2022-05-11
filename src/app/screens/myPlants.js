@@ -17,38 +17,17 @@ import COLORS from "../../data/colors"
 import { useEffect, useState } from "react";
 import PlantCard from "../components/PlantCard";
 import Header from "../components/header"
+import FloatingActionButton from "../components/FloatingActionButton";
 
-export default function MyPlants({ plants }) {
+export default function MyPlants({ plants, navigation }) {
   const [value, setValue] = useState("");
-  const Example = () => {
-    return (
-      <Center>
-        <Box
-          height="200"
-          w="400"
-          shadow="2"
-          rounded="lg"
-          _dark={{
-            bg: "coolGray.200:alpha.20",
-          }}
-          _light={{
-            bg: "coolGray.200:alpha.20",
-          }}
-        >
-
-        </Box>
-      </Center>
-
-    );
-  };
-
+  useEffect(() => {
+    console.log(plants);
+  }, [])
   return (
     <View
       style={{ alignItems: "center", backgroundColor: "white", height: "100%" }}
     >
-
-
-
       <View
         style={{
           height: (75 * Dimensions.get("screen").height) / 100,
@@ -111,7 +90,7 @@ export default function MyPlants({ plants }) {
           />
         </View>
       </View>
-
+      <FloatingActionButton navigation={navigation} ></FloatingActionButton>
     </View>
   );
 }

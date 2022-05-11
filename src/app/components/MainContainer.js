@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native'
-import { collection, where, getDocs } from "firebase/firestore";
+import { collection, where, getDocs, onSnapshot } from "firebase/firestore";
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -33,9 +33,25 @@ export default function MainContainer() {
         }
     }
     const getPlants = async (idRaspBerry) => {
+        const plants = [];
         const querySnapshot = await getDocs(collection(db, "raspberries", idRaspBerry, "data"));
-        querySnapshot.forEach((doc) => setPlants([...plants, { id: doc.id, ...doc.data() }]))
+        querySnapshot.forEach((doc) => { plants.push({ id: doc.id, ...doc.data() }); console.log(doc.data().displayName) });
+        setPlants(plants);
     }
+    useEffect(() => {
+        if (infos.idRaspBerry) {
+            const q = collection(db, "raspberries", infos.idRaspBerry, "data");
+
+            const unsub = onSnapshot(q, (querySnapshot) => {
+                const plants = [];
+                querySnapshot.forEach((doc) => {
+                    plants.push({ id: doc.id, ...doc.data() });
+                })
+                setPlants(plants);
+            })
+            return () => unsub();
+        }
+    }, [infos.idRaspBerry])
     useEffect(() => {
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
