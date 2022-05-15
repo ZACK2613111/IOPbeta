@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native'
-import { collection, where, getDocs, onSnapshot } from "firebase/firestore";
+// import { collection, where, getDocs, onSnapshot } from "firebase/firestore";
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { auth, db } from "../../core/firebase"
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+// import { doc, getDoc } from 'firebase/firestore';
+import { child, getDatabase, onValue, ref, get } from 'firebase/database';
 
 //Screens 
 import DashBoard from '../screens/dashBoard'
@@ -21,37 +22,94 @@ export default function MainContainer() {
     const [user, setUser] = useState(null);
     const [plants, setPlants] = useState([]);
     const [infos, setInfos] = useState({});
-    const getInfos = async (currentUser) => {
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            setInfos(docSnap.data());
-            getPlants(docSnap.data().idRaspBerry);
 
-        } else {
-            console.log("doesnt existe")
-        }
-    }
     const getPlants = async (idRaspBerry) => {
         const plants = [];
-        const querySnapshot = await getDocs(collection(db, "raspberries", idRaspBerry, "data"));
-        querySnapshot.forEach((doc) => { plants.push({ id: doc.id, ...doc.data() }); console.log(doc.data().displayName) });
-        setPlants(plants);
+        const dbRef = ref(getDatabase());
+        try {
+
+            const snapshot = await get(ref(db, "raspberries/" + idRaspBerry, "data/"))
+            if (snapshot.exists()) {
+
+                console.log(snapshot.val()["data"]);
+                snapshot.val()["data"].forEach((childSnapshot, index) => {
+                    plants.push({ id: index, ...childSnapshot });
+                });
+
+                setPlants(plants);
+                console.log(plants);
+            }
+            else {
+                console.log("no data");
+            }
+        } catch (e) {
+            console.log(e)
+        }
+        // const plants = [];
+        // const plantsRef = ref(db, 'raspberries/' + idRaspBerry + 'data/', plant.uid);
+        // const querySnapshot = await getDocs(collection(db, "raspberries", idRaspBerry, "data"));
+        // onValue(plantsRef, (snapshot) => {
+        //     snapshot.forEach(childSnapshot => {
+        //         plants.push({ id: childSnapshot.id, ...childSnapshot.data() }); console.log(childSnapshot.data().displayName)
+        //         setPlants(plants);
+
+        //     });
+        // });
+        // querySnapshot.forEach((doc) => { plants.push({ id: doc.id, ...doc.data() }); console.log(doc.data().displayName) });
+    };
+
+    const getInfos = (currentUser) => {
+        const dbRef = ref(getDatabase());
+        get(ref(db, "users/", currentUser.uid)).then((snapshot) => {
+            if (snapshot.exists()) {
+                setInfos(snapshot.val());
+                getPlants(snapshot.val()[currentUser.uid].idRaspBerry);
+
+            }
+            else {
+                console.log("no data");
+            }
+        }).catch((e) => {
+            console.log(e);
+        });
+
     }
+
+
+    // const getInfos = async (currentUser) => {
+    //     const docRef = ref(db, "users", currentUser.uid);
+    //     const docSnap = await getDoc(docRef);
+    //     if (docSnap.exists()) {
+    //         setInfos(docSnap.data());
+    //         getPlants(docSnap.data().idRaspBerry);
+    //     } else {
+    //         console.log("doesnt existe")
+    //     }
+    // }
+
+
+
+
+
+
+
     useEffect(() => {
         if (infos.idRaspBerry) {
-            const q = collection(db, "raspberries", infos.idRaspBerry, "data");
-
-            const unsub = onSnapshot(q, (querySnapshot) => {
+            const plantsRef = ref(db, "raspberries/" + idRaspBerry, "data/");
+            const unsub = onValue(plantsRef, (querySnapshot) => {
                 const plants = [];
-                querySnapshot.forEach((doc) => {
-                    plants.push({ id: doc.id, ...doc.data() });
+                querySnapshot.forEach((childSnapshot) => {
+                    plants.push({ id: childSnapshot.id, ...childSnapshot.data() });
                 })
                 setPlants(plants);
+                console.log(plants);
             })
             return () => unsub();
         }
     }, [infos.idRaspBerry])
+
+
+
     useEffect(() => {
         onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
@@ -62,6 +120,7 @@ export default function MainContainer() {
             }
         })
     }, [])
+
     return (
         <Tab.Navigator
             screenOptions={{

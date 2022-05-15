@@ -14,6 +14,8 @@ export default function Screen1({ navigation, infos }) {
         <Weatherbar style={styles.Weatherbar} />
         <View style={styles.sectionRond}>
           <Donutchart />
+          <Donutchart />
+
         </View>
       </View>
     </View>

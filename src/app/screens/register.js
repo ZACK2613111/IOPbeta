@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 import { auth, db } from '../../core/firebase'
 import { doc, setDoc } from "firebase/firestore";
-
+import { ref, onValue } from "firebase/database"
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState('')
@@ -20,17 +20,21 @@ const RegisterScreen = () => {
     const navigate = useNavigation();
 
 
+    const writeUserData = (userId, fname, lname, raspId, age) => {
+        set(ref(db, 'users/' + userId), {
+            displayName: fname,
+            displayLastName: lname,
+            idRaspBerry: raspId,
+            age: age,
+        });
+    }
+
     const handleRegister = () => {
         setLoading(true);
         setError("");
         createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             const user = userCredential.user;
-            setDoc(doc(db, "users", user.uid), {
-                age: age,
-                displayLastName: lname,
-                displayName: fname,
-                idRaspBerry: raspId,
-            });
+            writeUserData(user, fname, lname, raspId, age);
         }).catch(e => setError(e.code)).finally(() => setLoading(false))
 
 
@@ -72,7 +76,7 @@ const RegisterScreen = () => {
                     value={raspId}
                     onChangeText={text => setRaspId(text)}
                     style={styles.input} />
-                <Text style={{ color: "red", fontFamily: "CircularStd-Book", marginLeft: 10 }}>{error}</Text>
+                <Text style={{ color: "red", marginLeft: 10 }}>{error}</Text>
             </View>
 
 
