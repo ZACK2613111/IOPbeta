@@ -31,13 +31,11 @@ export default function MainContainer() {
             const snapshot = await get(ref(db, "raspberries/" + idRaspBerry, "data/"))
             if (snapshot.exists()) {
 
-                console.log(snapshot.val()["data"]);
                 snapshot.val()["data"].forEach((childSnapshot, index) => {
                     plants.push({ id: index, ...childSnapshot });
                 });
 
                 setPlants(plants);
-                console.log(plants);
             }
             else {
                 console.log("no data");
@@ -62,8 +60,10 @@ export default function MainContainer() {
         const dbRef = ref(getDatabase());
         get(ref(db, "users/", currentUser.uid)).then((snapshot) => {
             if (snapshot.exists()) {
-                setInfos(snapshot.val());
+                setInfos(snapshot.val()[currentUser.uid]);
                 getPlants(snapshot.val()[currentUser.uid].idRaspBerry);
+                console.log(snapshot.val()[currentUser.uid].idRaspBerry);
+
 
             }
             else {
@@ -76,16 +76,7 @@ export default function MainContainer() {
     }
 
 
-    // const getInfos = async (currentUser) => {
-    //     const docRef = ref(db, "users", currentUser.uid);
-    //     const docSnap = await getDoc(docRef);
-    //     if (docSnap.exists()) {
-    //         setInfos(docSnap.data());
-    //         getPlants(docSnap.data().idRaspBerry);
-    //     } else {
-    //         console.log("doesnt existe")
-    //     }
-    // }
+
 
 
 
@@ -95,14 +86,13 @@ export default function MainContainer() {
 
     useEffect(() => {
         if (infos.idRaspBerry) {
-            const plantsRef = ref(db, "raspberries/" + idRaspBerry, "data/");
+            const plantsRef = ref(db, "raspberries/" + infos.idRaspBerry, "data/");
             const unsub = onValue(plantsRef, (querySnapshot) => {
                 const plants = [];
                 querySnapshot.forEach((childSnapshot) => {
-                    plants.push({ id: childSnapshot.id, ...childSnapshot.data() });
+                    plants.push({ id: childSnapshot.id, ...childSnapshot.val() });
                 })
                 setPlants(plants);
-                console.log(plants);
             })
             return () => unsub();
         }

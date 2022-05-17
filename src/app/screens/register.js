@@ -3,8 +3,7 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 import { auth, db } from '../../core/firebase'
-import { doc, setDoc } from "firebase/firestore";
-import { ref, onValue } from "firebase/database"
+import { ref, onValue, set } from "firebase/database"
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState('')
@@ -34,7 +33,8 @@ const RegisterScreen = () => {
         setError("");
         createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             const user = userCredential.user;
-            writeUserData(user, fname, lname, raspId, age);
+            writeUserData(user.uid, fname, lname, raspId, age);
+            navigate.replace("Main"); console.log("MSG ENV!!")
         }).catch(e => setError(e.code)).finally(() => setLoading(false))
 
 
