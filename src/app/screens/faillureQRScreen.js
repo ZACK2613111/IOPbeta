@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 
 export default function faillureQR({ navigation }) {
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', height: '100%' }}>
+
+      <Image source={require('../../assets/images/faillureQRcode.png')} style={{ marginTop: '20%', marginLeft: '25%' }} />
       <TouchableOpacity
         style={{
           backgroundColor: "#FF5454",
