@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, Animated } from "react-native";
+import React, {useState, useEffect} from "react";
+import {View, StyleSheet, TouchableOpacity, Text, Animated} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import COLORS from "../../data/colors";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {NavigationContainer} from "@react-navigation/native";
+import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
 const buttonSize = 50;
 
+const FloatingActionButton = ({navigation, setDisplayDelete}) => {
+  const [pressed, setPressed] = useState(false);
+  const [active, setActive] = useState(false);
+  const [animation] = useState(new Animated.Value(1));
 
-const FloatingActionButton = ({ navigation }) => {
   const actions = [
     {
       title: "Add",
@@ -20,14 +23,12 @@ const FloatingActionButton = ({ navigation }) => {
     {
       title: "Delete",
       onPress: () => {
-
+        setActive(false);
+        setDisplayDelete(true);
       },
       nameIcon: "delete",
     },
   ];
-  const [pressed, setPressed] = useState(false);
-  const [active, setActive] = useState(false);
-  const [animation] = useState(new Animated.Value(1));
 
   useEffect(() => {
     active ? animateTiming(0) : animateTiming(1);
@@ -67,18 +68,16 @@ const FloatingActionButton = ({ navigation }) => {
             key={index}
             style={[
               styles.actionContainer,
-              { opacity: opacityAnimation() },
+              {opacity: opacityAnimation()},
               actionTranslateY,
             ]}
-
-          // onPress={console.log("first")} pourTest
           >
             <TouchableOpacity onPress={action.onPress} style={styles.action}>
               <Icon
                 color={"white"}
                 name={action.nameIcon}
                 size={25}
-                style={{ alignItems: "center", justifyContent: "center" }}
+                style={{alignItems: "center", justifyContent: "center"}}
               ></Icon>
             </TouchableOpacity>
           </Animated.View>
@@ -89,8 +88,6 @@ const FloatingActionButton = ({ navigation }) => {
         style={styles.main}
         onPress={() => {
           setActive(!active);
-          // console.log("first"); Pour test
-          // blur();
         }}
       >
         <Icon color={"black"} name={!active ? "plus" : "close"} size={25} />
@@ -103,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     bottom: -50,
-    right: 5,
+    right: 30,
   },
   actionContainer: {
     height: buttonSize,
@@ -120,9 +117,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: COLORS.GREEN,
-    // backgroundColor: active ? "#fff" : COLORS.GREEN,
     shadowOpacity: 0.25,
-    shadowOffset: { height: 0.5, width: 0.5 },
+    shadowOffset: {height: 0.5, width: 0.5},
     elevation: 5,
   },
   action: {
@@ -130,12 +126,11 @@ const styles = StyleSheet.create({
     height: buttonSize,
     width: buttonSize,
     borderRadius: buttonSize / 7,
-    // backgroundColor: pressed ? "#fff" : COLORS.GREEN,
     backgroundColor: COLORS.GREEN,
     justifyContent: "center",
     shadowOpacity: 0.25,
     padding: 12,
-    shadowOffset: { height: 0.5, width: 0.5 },
+    shadowOffset: {height: 0.5, width: 0.5},
   },
   text: {
     textAlign: "center",

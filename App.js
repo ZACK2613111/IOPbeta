@@ -8,7 +8,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from './src/app/screens/login';
 import RegisterScreen from './src/app/screens/register';
+import GraphCard from './src/app/screens/Graphs';
 import QRcodeScanner from './src/app/screens/QRcodeScanner';
+import faillureQR from './src/app/screens/faillureQRScreen';
+import successQR from './src/app/screens/successQRScreen';
+
 import { auth } from './src/core/firebase';
 import { signOut } from 'firebase/auth';
 // import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -60,13 +64,15 @@ export default function App() {
 
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name='QRcodeScanner' component={QRcodeScanner} /> */}
+        <Stack.Screen name='faillureQR' component={faillureQR} />
+        <Stack.Screen name='successQR' component={successQR} />
 
+        <Stack.Screen name='QRcodeScanner' component={QRcodeScanner} />
+        <Stack.Screen name='Addplant' component={Addplant} />
+        <Stack.Screen name='Main' component={MainContainer} />
+        <Stack.Screen name='Graphic' component={GraphCard} />
         <Stack.Screen name='Login' component={LoginScreen} />
         <Stack.Screen name='Register' component={RegisterScreen} />
-
-        <Stack.Screen name='Main' component={MainContainer} />
-        <Stack.Screen name='Addplant' component={Addplant} />
       </Stack.Navigator>
     </NavigationContainer>
     /* <NavigationContainer>

@@ -1,32 +1,34 @@
 import {
   View,
-  SafeAreaView,
-  Text,
   FlatList,
   Image,
   Dimensions,
-  TouchableOpacity,
-  Icon,
   TextInput,
   Pressable,
 } from "react-native";
 
-
-
-import COLORS from "../../data/colors"
+import COLORS from "../../data/colors";
 import { useEffect, useState } from "react";
 import PlantCard from "../components/PlantCard";
-import Header from "../components/header"
 import FloatingActionButton from "../components/FloatingActionButton";
 
 export default function MyPlants({ plants, navigation }) {
+  const [displayDelete, setDisplayDelete] = useState(false);
   const [value, setValue] = useState("");
+  const [plantToDelete, setPlantToDelete] = useState([]);
   useEffect(() => {
     console.log(plants);
-  }, [])
+  }, []);
+  useEffect(() => {
+    console.log(plantToDelete);
+  }, [plantToDelete]);
   return (
     <View
-      style={{ alignItems: "center", backgroundColor: "white", height: "100%" }}
+      style={{
+        alignItems: "center",
+        backgroundColor: "#fff",
+        height: "100%",
+      }}
     >
       <View
         style={{
@@ -85,12 +87,18 @@ export default function MyPlants({ plants, navigation }) {
                 img={item.picture}
                 etat={"Bon état"}
                 id={item.id}
+                display={displayDelete}
+                setPlantToDelete={setPlantToDelete}
+                plantToDelete={plantToDelete}
               />
             )}
           />
         </View>
       </View>
-      <FloatingActionButton navigation={navigation} ></FloatingActionButton>
+      <FloatingActionButton
+        setDisplayDelete={setDisplayDelete}
+        navigation={navigation}
+      ></FloatingActionButton>
     </View>
   );
 }

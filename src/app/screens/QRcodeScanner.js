@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from "@react-navigation/native";
 
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Dimensions } from 'react-native';
+import { ref, get } from 'firebase/database';
+import { db } from "../../core/firebase"
 
 
 export default function QRcodeScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState('not yet scanned');
+  const navigate = useNavigation();
+
   const askForCameraPermission = () => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -26,7 +31,20 @@ export default function QRcodeScanner({ navigation }) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-    console.log('Type' + type + "\nData" + data)
+    console.log(type + "\n" + data);
+    get(ref(db, 'raspberries/' + data)).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        navigate.replace("Main")
+      }
+      else {
+        navigate.replace("QRcodeScanner")
+        console.log("mafihach");
+      }
+    }).catch((e) => {
+      console.log(e);
+    });
+
   }
 
   //Check permissions and return the screens
@@ -54,12 +72,37 @@ export default function QRcodeScanner({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.titleText}>Scan the QR code{"\n"}at the back of your controller</Text>
       <View style={styles.barcodebox}>
         <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={{ height: 400, width: 400 }} />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
-      {scanned && <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato' />}
+      <TouchableOpacity
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.70)",
+          width: '60%',
+          margin: 10,
+          borderRadius: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 60,
+          marginBottom: 130,
+        }}
+        onPress={() => { }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            padding: 10,
+            color: "white",
+          }}
+        >
+          Problem scanning?
+        </Text>
+      </TouchableOpacity>
+      {/* <Text style={styles.maintext}>{text}</Text> */}
+      {/* {scanned && <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato' />} */}
     </View>
   );
 
@@ -68,7 +111,7 @@ export default function QRcodeScanner({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#00000010',
     alignItems: 'center',
     justifyContent: 'center',
   }, barcodebox: {
@@ -77,12 +120,27 @@ const styles = StyleSheet.create({
     height: 300,
     width: 300,
     overflow: 'hidden',
-    borderRadius: 50,
-    backgroundColor: 'tomato'
+    borderRadius: 15,
+    borderWidth: 4,
+    borderColor: '#07D779',
+    backgroundColor: 'tomato',
+    margin: 30,
+
   },
   maintext: {
     fontSize: 16,
     margin: 20,
+  },
+  titleText: {
+    fontFamily: 'CircularStd-Medium',
+    fontWeight: '700',
+    fontSize: 16,
+    marginTop: 120,
+    marginBottom: 60,
+    width: 216,
+    alignContent: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   }
 })
 

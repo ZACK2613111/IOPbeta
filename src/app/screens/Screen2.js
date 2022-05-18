@@ -26,8 +26,8 @@ export default function Screen2() {
 
     }
     return (
-        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => updateCommandTest(0, 20)}
+        <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center', backgroundColor: '#fff' }}>
+            <TouchableOpacity onPress={() => updateCommandTest(1, 30)}
                 style={[styles.button, styles.buttonOutline]}
             >
                 <Text style={styles.buttonOutlineText}>{loading ? "Loading..." : "SEND TO FIRE"}</Text>

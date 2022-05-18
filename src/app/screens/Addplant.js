@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -16,6 +15,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from "expo-image-picker";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const items = [
   { label: "Apple", value: "apple" },
@@ -23,6 +23,8 @@ const items = [
 ];
 
 export default function AddPlant({ navigation }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+
   let openImagePickerAsync = async () => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -32,16 +34,20 @@ export default function AddPlant({ navigation }) {
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    console.log(pickerResult);
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
     if (pickerResult.cancelled === true) {
       return;
     }
-
-    setSelectedImage({ localUri: pickerResult.uri });
+    if (!pickerResult.cancelled) {
+      setSelectedImage(pickerResult.uri);
+    }
   };
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedValue, setSelectedValue] = useState("java");
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -51,6 +57,28 @@ export default function AddPlant({ navigation }) {
   const [text, setText] = useState("");
   const [text1, setText1] = useState("");
   const [state, setState] = useState("");
+  const onFitemOpen = useCallback(() => {
+    setOpen1(false);
+  }, []);
+
+  const onSitemOpen = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  const confirmHandler = () => {
+    const data = {
+      controller: value,
+      displayName: text,
+      humidity: 22,
+      moisture: 11,
+      picture: "",
+      specie: "typePlant",
+      temperature: 40,
+      picture:
+        "https://asset.bloomnation.com/c_pad,d_vendor:global:catalog:product:image.png,f_auto,fl_preserve_transparency,q_auto/v1645689423/vendor/8567/catalog/product/2/0/20200304122155_file_5e5ef4a3ccb60_5e5ef7b7cd5fa.jpg",
+    };
+    // ajouter a data base
+  };
   return (
     <View style={{ height: "100%", width: "100%" }}>
       <View
@@ -67,10 +95,15 @@ export default function AddPlant({ navigation }) {
           }}
           onPress={openImagePickerAsync}
         >
-          <Image
-            source={require("../../assets/Group.png")}
-            resizeMode="contain"
-          />
+          {selectedImage ? (
+            <Image
+              source={{ uri: selectedImage }}
+              style={{ borderRadius: 50, width: 100, height: 100 }}
+              resizeMode="contain"
+            />
+          ) : (
+            <Image source={require("../../assets/Group.png")} />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -82,7 +115,10 @@ export default function AddPlant({ navigation }) {
             alignItems: "center",
           }}
         >
-
+          {/* <Image
+            source={require("../../assets/select.png")}
+            resizeMode="contain"
+          ></Image> */}
         </TouchableOpacity>
       </View>
 
@@ -143,6 +179,8 @@ export default function AddPlant({ navigation }) {
             textBreakStrategy="highQuality"
           />
         </View>
+        {console.log(text)}
+        {console.log(text1)}
         <Text
           style={{
             fontWeight: "bold",
@@ -162,10 +200,18 @@ export default function AddPlant({ navigation }) {
               borderColor: "#E3E3E3",
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              zIndex: 800,
-              // zIndexInverse: 1000,
             }}
             open={open}
+            zIndex={3000}
+            zIndexInverse={1000}
+            onOpen={onFitemOpen}
+            dropDownContainerStyle={{
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+              maxHeight: (windowHeight * 10) / 100,
+              marginTop: 0,
+              borderColor: "#E3E3E3",
+            }}
             value={value}
             items={items}
             setOpen={setOpen}
@@ -181,55 +227,59 @@ export default function AddPlant({ navigation }) {
               borderColor: "#E3E3E3",
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              zIndex: 1500,
-              // zIndexInverse: 2000,
             }}
+            dropDownContainerStyle={{
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+              maxHeight: (windowHeight * 10) / 100,
+              marginTop: 0,
+              borderColor: "#E3E3E3",
+            }}
+            scrollViewProps={{
+              decelerationRate: "fast",
+            }}
+            modalContentContainerStyle={{
+              backgroundColor: "#f80000",
+            }}
+            dropDownDirection="BOTTOM"
+            listMode="FLATLIST"
+            onOpen={onSitemOpen}
             open={open1}
             value={value1}
             items={items}
             setOpen={setOpen1}
             setValue={setValue1}
-          // zIndex={2000}
-          // zIndexInverse={2000}
+            zIndex={2000}
+            zIndexInverse={2000}
           />
         </View>
 
-        <View style={{}}>
-          <Text style={{ marginLeft: 20 }}>Pin Number</Text>
+        {/* <View>
+          <Text style={{marginLeft: 20}}>Pin Number</Text>
           <DropDownPicker
             style={{
               borderColor: "#E3E3E3",
               marginTop: 3,
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              zIndex: 1000,
-              // zIndexInverse: 3000,
             }}
             open={open2}
             value={value2}
             items={items}
             setOpen={setOpen2}
             setValue={setValue2}
-            customItemContainerStyle={{
-              backgroundColor: "#f70000",
+            dropDownContainerStyle={{
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+              maxHeight: (windowHeight * 10) / 100,
+              marginTop: 0,
+              borderColor: "#E3E3E3",
             }}
-          // zIndex={1000}
-          // zIndexInverse={1000}
+            zIndex={1000}
+            zIndexInverse={3000}
           />
-        </View>
+        </View> */}
       </View>
-      <Picker
-        selectedValue={selectedValue}
-        style={{
-          height: 72,
-          width: (windowWidth * 90) / 100,
-          margin: (windowWidth * 5) / 100,
-        }}
-        onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-      >
-        <Picker.Item label="Java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
-      </Picker>
       <View
         style={{
           flexDirection: "row",
@@ -273,6 +323,9 @@ export default function AddPlant({ navigation }) {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={() => {
+            navigation.goBack();
+          }}
         >
           <Text
             style={{
@@ -296,5 +349,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  thumbnail: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain",
   },
 });
