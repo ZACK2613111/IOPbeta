@@ -23,7 +23,7 @@ import {MaterialCommunityIcons} from "@expo/vector-icons";
 import COLORS from "../../data/colors";
 import {set} from "firebase/database";
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidden, setHidden] = useState(false);
@@ -51,8 +51,8 @@ const LoginScreen = () => {
         <Image
           source={require("../../assets/logoGroup.png")}
           style={{
-            alignContent: "center",
             justifyContent: "center",
+            alignSelf: "center",
           }}
           resizeMode="contain"
         ></Image>

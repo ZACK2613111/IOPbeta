@@ -12,37 +12,14 @@ import GraphCard from "./src/app/screens/Graphs";
 import QRcodeScanner from "./src/app/screens/QRcodeScanner";
 import FaillureQR from "./src/app/screens/faillureQRScreen";
 import SuccessQR from "./src/app/screens/successQRScreen";
+import Onboarding from "./src/app/screens/Onboarding";
 
 import {auth} from "./src/core/firebase";
 import {signOut} from "firebase/auth";
-// import { createDrawerNavigator } from '@react-navigation/drawer';
+import OnboardingData from "./src/data/OnboardingData";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // const MainDrawerButton = ({ navigation }) => {
-  //   return (
-  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //       <Button
-  //         onPress={() => navigation.navigate('Main')}
-  //         title="Dashboard"
-  //       />
-  //     </View>
-  //   );
-  // }
-
-  // const SignOutDrawerButton = ({ navigation }) => {
-  //   return (
-  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //       <Button
-  //         onPress={() => { signOut(auth); navigation.navigate('Login') }}
-  //         title="Dashboard"
-  //       />
-  //     </View>
-  //   );
-
-  // }
-  //   // const Drawer = createDrawerNavigator();
-
   let [fontsLoaded] = useFonts({
     "CircularStd-Bold": require("./src/assets/fonts/CircularStdBold.ttf"),
     "CircularStd-Book": require("./src/assets/fonts/CircularStdBook.ttf"),
@@ -52,22 +29,48 @@ export default function App() {
     <View></View>;
   }
   return (
-    // <MainContainer />
-
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen
+          name="Onboarding"
+          component={Onboarding}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="QRcodeScanner" component={QRcodeScanner} />
-        <Stack.Screen name="Addplant" component={Addplant} />
-        <Stack.Screen name="Main" component={MainContainer} />
+        <Stack.Screen
+          name="Addplant"
+          component={Addplant}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainContainer}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="Graphic" component={GraphCard} />
         <Stack.Screen name="faillureQR" component={FaillureQR} />
         <Stack.Screen name="successQR" component={SuccessQR} />
       </Stack.Navigator>
     </NavigationContainer>
-    /* <NavigationContainer>
-      <Drawer.Screen name='MainDrawer' component={MainDrawerButton} />
-    </NavigationContainer> */
   );
 }

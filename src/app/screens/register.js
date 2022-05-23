@@ -30,17 +30,16 @@ const RegisterScreen = ({navigation}) => {
   const [lname, setLname] = useState("");
   const [hidden, setHidden] = useState(false);
   const [hidden1, setHidden1] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigation();
+
+  const checkInput = () => {};
 
   const writeUserData = (userId, fname, lname, email, password) => {
     set(ref(db, "users/" + userId), {
       displayName: fname,
       displayLastName: lname,
-      // displayEmailAdress: email,
-      // displayPassWord: password,
     });
   };
 
@@ -60,7 +59,7 @@ const RegisterScreen = ({navigation}) => {
       <Image
         source={require("../../assets/logoRegister.png")}
         resizeMode="contain"
-        style={{top: "5%"}}
+        style={{alignSelf: "center"}}
       ></Image>
       <View style={styles.inputContainer}>
         <View style={{marginTop: "30%", marginBottom: "5%"}}>
@@ -84,7 +83,7 @@ const RegisterScreen = ({navigation}) => {
             name={"contacts"}
             color={COLORS.GRAY}
             size={25}
-            style={{position: "absolute", left: "5%", top: "15%", zIndex: 1}}
+            style={{position: "absolute", left: "5%", top: "20%", zIndex: 1}}
           ></MaterialCommunityIcons>
           <TextInput
             placeholder="Last Name"
@@ -100,7 +99,7 @@ const RegisterScreen = ({navigation}) => {
             name={"email"}
             color={COLORS.GRAY}
             size={25}
-            style={{position: "absolute", left: "5%", top: "15%", zIndex: 1}}
+            style={{position: "absolute", left: "5%", top: "20%", zIndex: 1}}
           ></MaterialCommunityIcons>
           <TextInput
             placeholder="Email Adress"
@@ -116,7 +115,7 @@ const RegisterScreen = ({navigation}) => {
             name={"email"}
             color={COLORS.GRAY}
             size={25}
-            style={{position: "absolute", left: "5%", top: "15%", zIndex: 1}}
+            style={{position: "absolute", left: "5%", top: "20%", zIndex: 1}}
           ></MaterialCommunityIcons>
           <TextInput
             placeholder="Confirm Email Adress"
@@ -132,7 +131,7 @@ const RegisterScreen = ({navigation}) => {
             name={"lock"}
             color={COLORS.GRAY}
             size={25}
-            style={{position: "absolute", left: "5%", top: "15%", zIndex: 1}}
+            style={{position: "absolute", left: "5%", top: "20%", zIndex: 1}}
           ></MaterialCommunityIcons>
           <TextInput
             placeholder="Password"
@@ -166,7 +165,7 @@ const RegisterScreen = ({navigation}) => {
             name={"lock"}
             color={COLORS.GRAY}
             size={25}
-            style={{position: "absolute", left: "5%", top: "15%", zIndex: 1}}
+            style={{position: "absolute", left: "5%", top: "20%", zIndex: 1}}
           ></MaterialCommunityIcons>
           <TextInput
             placeholder="Confirm Password"

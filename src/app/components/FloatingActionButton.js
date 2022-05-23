@@ -5,12 +5,25 @@ import COLORS from "../../data/colors";
 
 const buttonSize = 50;
 
+// For Test
+
 const FloatingActionButton = ({
   navigation,
   setDisplayDelete,
   idRaspBerry,
   index,
+  plantToDelete,
 }) => {
+  const deletePlant = async (plantToDelete) => {
+    try {
+      await deleteDoc(
+        ref(db, "raspberries/" + idRaspBerry + "/data/" + index),
+        plantToDelete
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const [pressed, setPressed] = useState(false);
   const [active, setActive] = useState(false);
   const [animation] = useState(new Animated.Value(1));
@@ -26,13 +39,20 @@ const FloatingActionButton = ({
     {
       title: "Delete",
       onPress: () => {
-        setActive(false);
+        // plantToDelete = [
+
+        // ]
+        setActive(!active);
         setDisplayDelete(true);
+        deletePlant(plantToDelete);
       },
       nameIcon: "delete",
     },
   ];
 
+  // 1653256052463
+  // 1653256079573,
+  // 1653316284464,
   useEffect(() => {
     active ? animateTiming(0) : animateTiming(1);
   }, [active]);
@@ -117,6 +137,7 @@ const styles = StyleSheet.create({
     height: buttonSize,
     width: buttonSize,
     borderRadius: buttonSize / 2,
+    backgroundColor: COLORS.GREEN,
     alignItems: "center",
     justifyContent: "center",
     shadowOpacity: 0.25,

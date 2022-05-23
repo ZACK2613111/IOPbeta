@@ -14,12 +14,16 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from "expo-image-picker";
 import {db} from "../../core/firebase";
-import {ref, set} from "firebase/database";
+import {ref, set, deleteDoc} from "firebase/database";
 import {ScrollView} from "react-native-gesture-handler";
 import COLORS from "../../data/colors";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+
+const navigateHelp = () => {
+  navigation.navigate("Help");
+};
 
 const data_Pin = [
   {label: "DATA_PIN_A0", value: "A0"},
@@ -84,6 +88,10 @@ const vanne_DHT = [
 ];
 
 export default function AddPlant({navigation, route}) {
+  const navigateHelp = () => {
+    navigation.navigate("Help");
+  };
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   const {index, idRaspBerry} = route.params;
@@ -116,16 +124,16 @@ export default function AddPlant({navigation, route}) {
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
-  const [open5, setOpen5] = useState(false);
+
   const [value, setValue] = useState(null);
   const [value1, setValue1] = useState(null);
   const [value2, setValue2] = useState(null);
   const [value3, setValue3] = useState(null);
   const [value4, setValue4] = useState(null);
-  const [value5, setValue5] = useState(null);
+
   const [text, setText] = useState("");
   const [text1, setText1] = useState("");
-  const [state, setState] = useState("");
+
   const onFitemOpen = useCallback(() => {
     setOpen1(false);
   }, []);
@@ -141,6 +149,7 @@ export default function AddPlant({navigation, route}) {
       console.log(e);
     }
   };
+
   const confirmHandler = () => {
     const data = {
       controller: value,
@@ -211,37 +220,42 @@ export default function AddPlant({navigation, route}) {
           General
         </Text>
         <View>
-          <Text style={{marginLeft: 20}}>Name</Text>
+          <Text style={styles.title}>NAME</Text>
           <TextInput
-            onChangeText={(text) => setText(text.trim())}
+            onChangeText={(text) => setText(text.trimStart())}
             value={text}
             style={{
               height: 50,
               width: (windowWidth * 90) / 100,
               borderWidth: 1,
               borderColor: "#E3E3E3",
+              backgroundColor: "white",
               borderRadius: 10,
               marginTop: 3,
               margin: (windowWidth * 5) / 100,
               paddingHorizontal: 15,
             }}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
+            maxLength={15}
+            underlineColorAndroid="White"
+            listMode="SCROLLVIEW"
+            autoCapitalize={true}
             placeholder="Enter your name"
+            placeholderTextColor={"#00000070"}
             multiline={false}
             textAlign="left"
             textBreakStrategy="highQuality"
           />
         </View>
         <View>
-          <Text style={{marginLeft: 20}}>Specie</Text>
+          <Text style={styles.title}>SPECIE</Text>
           <TextInput
-            onChangeText={(text1) => setText1(text1.trim())}
+            onChangeText={(text1) => setText1(text1.trimStart())}
             value={text1}
             style={{
               height: 50,
               width: (windowWidth * 90) / 100,
               borderWidth: 1,
+              backgroundColor: "white",
               borderColor: "#E3E3E3",
               borderRadius: 10,
               marginTop: 3,
@@ -249,11 +263,14 @@ export default function AddPlant({navigation, route}) {
               paddingHorizontal: 15,
             }}
             underlineColorAndroid="transparent"
-            autoCapitalize="none"
+            autoCapitalize={true}
             placeholder="Enter your specie"
+            placeholderTextColor={"#00000090"}
+            listMode="SCROLLVIEW"
             multiline={false}
             textAlign="left"
             textBreakStrategy="highQuality"
+            maxLength={30}
           />
         </View>
         <Text
@@ -267,7 +284,7 @@ export default function AddPlant({navigation, route}) {
           Soil Moisture
         </Text>
         <View style={{}}>
-          <Text style={{marginLeft: 20}}>POWER_PIN</Text>
+          <Text style={styles.title}>POWER_PIN</Text>
           <DropDownPicker
             style={{
               marginTop: 3,
@@ -276,26 +293,27 @@ export default function AddPlant({navigation, route}) {
               margin: (windowWidth * 5) / 100,
             }}
             open={open}
-            zIndex={3000}
-            zIndexInverse={1000}
             onOpen={onFitemOpen}
             placeholder="Select your POWER_PIN"
             dropDownContainerStyle={{
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              maxHeight: (windowHeight * 10) / 100,
+              maxHeight: (windowHeight * 13.1) / 100,
               marginTop: 0,
               borderColor: "#E3E3E3",
+              paddingBottom: 5,
             }}
+            listMode="SCROLLVIEW"
             value={value}
             items={power_pin}
             setOpen={setOpen}
             setValue={setValue}
+            zIndex={10000}
           />
         </View>
 
         <View style={{}}>
-          <Text style={{marginLeft: 20}}>DATA_PIN</Text>
+          <Text style={styles.title}>DATA_PIN</Text>
           <DropDownPicker
             style={{
               marginTop: 10,
@@ -317,6 +335,7 @@ export default function AddPlant({navigation, route}) {
               backgroundColor: "#f80000",
             }}
             dropDownDirection="BOTTOM"
+            listMode="SCROLLVIEW"
             onOpen={onSitemOpen}
             placeholder="Select your DATA_PIN"
             open={open1}
@@ -324,8 +343,6 @@ export default function AddPlant({navigation, route}) {
             items={data_Pin}
             setOpen={setOpen1}
             setValue={setValue1}
-            zIndex={2000}
-            zIndexInverse={2000}
           />
         </View>
 
@@ -340,7 +357,7 @@ export default function AddPlant({navigation, route}) {
           DHT
         </Text>
         <View style={{}}>
-          <Text style={{marginLeft: 20}}>DATA</Text>
+          <Text style={styles.title}>DATA</Text>
           <DropDownPicker
             style={{
               marginTop: 3,
@@ -348,15 +365,14 @@ export default function AddPlant({navigation, route}) {
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
             }}
+            listMode="SCROLLVIEW"
             open={open2}
-            zIndex={3000}
-            zIndexInverse={1000}
             // onOpen={onFitemOpen}
             placeholder="Select your DATA"
             dropDownContainerStyle={{
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              maxHeight: (windowHeight * 10) / 100,
+              maxHeight: (windowHeight * 14) / 100,
               marginTop: 0,
               borderColor: "#E3E3E3",
             }}
@@ -368,7 +384,7 @@ export default function AddPlant({navigation, route}) {
         </View>
 
         <View style={{}}>
-          <Text style={{marginLeft: 20}}>POWER</Text>
+          <Text style={styles.title}>POWER</Text>
           <DropDownPicker
             style={{
               marginTop: 10,
@@ -379,16 +395,12 @@ export default function AddPlant({navigation, route}) {
             dropDownContainerStyle={{
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
-              maxHeight: (windowHeight * 10) / 100,
+              maxHeight: (windowHeight * 14) / 100,
               marginTop: 0,
               borderColor: "#E3E3E3",
+              paddingBottom: 5,
             }}
-            scrollViewProps={{
-              decelerationRate: "fast",
-            }}
-            modalContentContainerStyle={{
-              backgroundColor: "#f80000",
-            }}
+            listMode="SCROLLVIEW"
             dropDownDirection="BOTTOM"
             placeholder="Select your POWER"
             open={open3}
@@ -397,12 +409,11 @@ export default function AddPlant({navigation, route}) {
             setOpen={setOpen3}
             setValue={setValue3}
             zIndex={2000}
-            zIndexInverse={2000}
           />
         </View>
 
         <View style={{}}>
-          <Text style={{marginLeft: 20}}>VANNE</Text>
+          <Text style={styles.title}>VANNE</Text>
           <DropDownPicker
             style={{
               marginTop: 10,
@@ -423,6 +434,7 @@ export default function AddPlant({navigation, route}) {
             modalContentContainerStyle={{
               backgroundColor: "#f80000",
             }}
+            listMode="SCROLLVIEW"
             dropDownDirection="BOTTOM"
             onOpen={onSitemOpen}
             placeholder="Select your VANNE"
@@ -431,6 +443,7 @@ export default function AddPlant({navigation, route}) {
             items={vanne_DHT}
             setOpen={setOpen4}
             setValue={setValue4}
+            zIndex={1000}
           />
         </View>
       </View>
@@ -444,6 +457,7 @@ export default function AddPlant({navigation, route}) {
               textAlign: "right",
               marginHorizontal: 30,
             }}
+            onPress={navigateHelp}
           >
             help?
           </Text>
@@ -515,8 +529,6 @@ export default function AddPlant({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -524,5 +536,12 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     resizeMode: "contain",
+  },
+  title: {
+    marginLeft: 20,
+    color: "#000",
+    opacity: 0.7,
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {View, Text, Image} from "react-native";
+import {View, Text, Image, Dimensions} from "react-native";
 // import { collection, where, getDocs, onSnapshot } from "firebase/firestore";
 
 import {NavigationContainer} from "@react-navigation/native";
@@ -13,7 +13,7 @@ import Water from "../screens/Water";
 
 //Screens
 import DashBoard from "../screens/dashBoard";
-import Screen2 from "../screens/Screen2";
+// import Screen2 from "../screens/Screen2"
 import MyPlants from "../screens/myPlants";
 
 const Tab = createBottomTabNavigator();
@@ -41,17 +41,6 @@ export default function MainContainer() {
     } catch (e) {
       console.log(e);
     }
-    // const plants = [];
-    // const plantsRef = ref(db, 'raspberries/' + idRaspBerry + 'data/', plant.uid);
-    // const querySnapshot = await getDocs(collection(db, "raspberries", idRaspBerry, "data"));
-    // onValue(plantsRef, (snapshot) => {
-    //     snapshot.forEach(childSnapshot => {
-    //         plants.push({ id: childSnapshot.id, ...childSnapshot.data() }); console.log(childSnapshot.data().displayName)
-    //         setPlants(plants);
-
-    //     });
-    // });
-    // querySnapshot.forEach((doc) => { plants.push({ id: doc.id, ...doc.data() }); console.log(doc.data().displayName) });
   };
 
   const getInfos = (currentUser) => {
@@ -76,8 +65,6 @@ export default function MainContainer() {
       const unsub = onValue(plantsRef, (querySnapshot) => {
         const plants = [];
         querySnapshot.forEach((childSnapshot) => {
-          console.log("----------------------------------------");
-          console.log("----------------------------------------");
           console.log({...childSnapshot.val()});
           plants.push({...childSnapshot.val()});
         });
@@ -101,11 +88,11 @@ export default function MainContainer() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          height: 80,
+          height: (Dimensions.get("window").height * 10) / 100,
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
           backgroundColor: "#0c0c0c",
@@ -152,13 +139,11 @@ export default function MainContainer() {
         {(props) => <DashBoard {...props} user={user} infos={infos} />}
       </Tab.Screen>
       <Tab.Screen
-        name={"Screen2"}
+        name={"Water"}
         component={Water}
         options={{
           tabBarIcon: ({focused}) => (
-            <View
-              style={{alignItems: "center", justifyContent: "center", flex: 1}}
-            >
+            <View style={{alignItems: "center", justifyContent: "center"}}>
               <Image
                 source={require("../../assets/drop.png")}
                 resizeMode="contain"
@@ -191,10 +176,9 @@ export default function MainContainer() {
       <Tab.Screen
         name={"My Plants"}
         options={{
+          headerShown: false,
           tabBarIcon: ({focused}) => (
-            <View
-              style={{alignItems: "center", justifyContent: "center", flex: 1}}
-            >
+            <View style={{alignItems: "center", justifyContent: "center"}}>
               <Image
                 source={require("../../assets/plant.png")}
                 resizeMode="contain"

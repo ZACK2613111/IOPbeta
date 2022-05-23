@@ -31,9 +31,9 @@ export default function PlantCard({
       style={{
         width: "48%",
         position: "relative",
-        borderColor: COLORS.GRAY,
         borderRadius: 20,
-        borderWidth: 2,
+        shadowColor: "#000",
+        elevation: 8,
         marginBottom: 10,
         marginHorizontal: "1%",
         overflow: "hidden",

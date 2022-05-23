@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   FlatList,
   ImageBackground,
+  Dimensions,
+  Image,
 } from "react-native";
-import AntDesignIcons from "react-native-vector-icons/AntDesign";
 import data from "../../data/OnboardingData";
 import COLORS from "../../data/colors";
 
-const Onboarding = () => {
+const Onboarding = ({navigation}) => {
   const flatlistRef = useRef();
   const [currentPage, setCurrentPage] = useState(0);
   const [viewableItems, setViewableItems] = useState([]);
@@ -35,19 +36,15 @@ const Onboarding = () => {
     });
   };
 
-  const handleBack = () => {
-    if (currentPage == 0) return;
-    flatlistRef.current.scrollToIndex({
-      animated: true,
-      index: currentPage - 1,
-    });
-  };
-
   const handleSkipToEnd = () => {
     flatlistRef.current.scrollToIndex({
       animate: true,
       index: data.length - 1,
     });
+  };
+
+  const navigateLogin = () => {
+    navigation.navigate("Login");
   };
 
   const renderTopSection = () => {
@@ -62,27 +59,19 @@ const Onboarding = () => {
           }}
         >
           {/* Back button */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={handleBack}
             style={{
               padding: 10,
             }}
-          >
-            {/* Back icon */}
-            {/* Hide back button on 1st screen */}
-            <AntDesignIcons
-              name="left"
-              style={{
-                fontSize: 25,
-                color: COLORS.black,
-                opacity: currentPage == 0 ? 0 : 1,
-              }}
-            />
-          </TouchableOpacity>
+          > */}
+          {/* Back icon */}
+          {/* Hide back button on 1st screen */}
+          {/* </TouchableOpacity> */}
 
           {/* Skip button */}
           {/* Hide Skip button on last screen */}
-          <TouchableOpacity onPress={handleSkipToEnd}>
+          {/* <TouchableOpacity onPress={handleSkipToEnd}>
             <Text
               style={{
                 fontSize: 18,
@@ -92,7 +81,7 @@ const Onboarding = () => {
             >
               Skip
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </SafeAreaView>
     );
@@ -103,7 +92,7 @@ const Onboarding = () => {
       <SafeAreaView>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
             paddingHorizontal: 10 * 2,
@@ -111,19 +100,26 @@ const Onboarding = () => {
           }}
         >
           {/* Pagination */}
-          <View style={{flexDirection: "row", alignItems: "center"}}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              alignSelf: "center",
+              bottom: "40%",
+            }}
+          >
             {
               // No. of dots
               [...Array(data.length)].map((_, index) => (
                 <View
                   key={index}
                   style={{
-                    width: 10,
-                    height: 10,
+                    width: 7,
+                    height: 7,
                     borderRadius: 5,
                     backgroundColor:
                       index == currentPage ? COLORS.GRAY : COLORS.GRAY + "20",
-                    marginRight: 8,
+                    marginRight: 5,
                   }}
                 />
               ))
@@ -132,6 +128,7 @@ const Onboarding = () => {
 
           {/* Next or GetStarted button */}
           {/* Show or Hide Next button & GetStarted button by screen */}
+
           {currentPage != data.length - 1 ? (
             <TouchableOpacity
               onPress={handleNext}
@@ -139,57 +136,48 @@ const Onboarding = () => {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 60,
-                height: 60,
-                borderRadius: 30,
-                backgroundColor: COLORS.GREEN,
+                width: 250,
+                height: 50,
+                borderRadius: 15,
+                backgroundColor: COLORS.GRAY,
+                opacity: 0.8,
               }}
-              activeOpacity={0.8}
-            >
-              <AntDesignIcons
-                name="right"
-                style={{fontSize: 18, color: "white", opacity: 0.3}}
-              />
-              <AntDesignIcons
-                name="right"
-                style={{fontSize: 25, color: "white", marginLeft: -15}}
-              />
-            </TouchableOpacity>
-          ) : (
-            // Get Started Button
-            <TouchableOpacity
-              style={{
-                paddingHorizontal: 10 * 2,
-                height: 60,
-                borderRadius: 30,
-                backgroundColor: COLORS.GREEN,
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              activeOpacity={0.7}
             >
               <Text
                 style={{
-                  color: "white",
-                  fontSize: 18,
-                  marginLeft: 10,
+                  // fontFamily: "CircularStd",
+                  fontWeight: "700",
+                  fontSize: 16,
+                  color: "#00000090",
                 }}
               >
-                Get Started
+                Next
               </Text>
-              <AntDesignIcons
-                name="right"
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={{
+                width: 250,
+                height: 50,
+                paddingHorizontal: 10 * 2,
+                borderRadius: 15,
+                backgroundColor: COLORS.GREEN,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={navigateLogin}
+            >
+              <Text
                 style={{
-                  fontSize: 18,
-                  color: "white",
-                  opacity: 0.3,
-                  marginLeft: 10,
+                  color: "#fff",
+                  // fontFamily: "Circular Std",
+                  fontWeight: "700",
+                  fontSize: 16,
                 }}
-              />
-              <AntDesignIcons
-                name="right"
-                style={{fontSize: 25, color: "white", marginLeft: -15}}
-              />
+              >
+                GO !
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -201,7 +189,7 @@ const Onboarding = () => {
     return (
       <View
         style={{
-          width: SIZES.width,
+          width: Dimensions.get("window").width,
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
@@ -213,27 +201,37 @@ const Onboarding = () => {
             marginVertical: 10 * 2,
           }}
         >
-          <ImageBackground
+          <Image
             source={item.img}
-            style={{width: 335, height: 335, resizeMode: "contains"}}
+            style={{width: 215, height: 215}}
+            resizeMode="contain"
           />
         </View>
         <View
           style={{
             paddingHorizontal: 10 * 4,
-            marginVertical: 10 * 4,
           }}
         >
-          <Text style={{fontSize: 30, textAlign: "center", fontWeight: "bold"}}>
+          <Text
+            style={{
+              fontSize: 34,
+              textAlign: "center",
+              fontWeight: "700",
+              color: "#7B7B7B",
+              fontFamily: "CircularStd",
+              lineHeight: 43,
+            }}
+          >
             {item.title}
           </Text>
           <Text
             style={{
               fontSize: 18,
-              opacity: 0.4,
               textAlign: "center",
-              marginTop: 15,
+              marginTop: 7,
               lineHeight: 28,
+              color: COLORS.GRAY,
+              fontWeight: "700",
             }}
           >
             {item.description}
@@ -247,7 +245,7 @@ const Onboarding = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: COLORS.background,
+        backgroundColor: "white",
         justifyContent: "center",
       }}
     >
@@ -268,9 +266,8 @@ const Onboarding = () => {
         onViewableItemsChanged={handleViewableItemsChanged.current}
         viewabilityConfig={{viewAreaCoveragePercentThreshold: 100}}
         initialNumToRender={1}
-        extraData={width}
+        extraData={Dimensions.get("window").width}
       />
-
       {/* BOTTOM SECTION - pagination & next or GetStarted button */}
       {renderBottomSection()}
     </View>

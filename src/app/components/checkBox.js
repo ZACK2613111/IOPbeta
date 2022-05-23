@@ -5,13 +5,13 @@ import COLORS from "../../data/colors";
 
 const CheckBox = (props) => {
   const iconName = props.isChecked
-    ? "checkbox-marked-circle-outline"
+    ? "check-circle"
     : "checkbox-blank-circle-outline";
 
   return (
     <View>
       <Pressable onPress={props.onPress}>
-        <MaterialCommunityIcons name={iconName} size={24} color={COLORS.RED} />
+        <MaterialCommunityIcons name={iconName} size={26} color={COLORS.RED} />
       </Pressable>
     </View>
   );
