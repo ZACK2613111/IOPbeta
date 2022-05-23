@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useCallback } from "react";
+import {useState, useCallback} from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -13,17 +13,80 @@ import {
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from "expo-image-picker";
+import {db} from "../../core/firebase";
+import {ref, set} from "firebase/database";
+import {ScrollView} from "react-native-gesture-handler";
+import COLORS from "../../data/colors";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const items = [
-  { label: "Apple", value: "apple" },
-  { label: "Banana", value: "banana" },
+const data_Pin = [
+  {label: "DATA_PIN_A0", value: "A0"},
+  {label: "DATA_PIN_A1", value: "A1"},
+  {label: "DATA_PIN_A2", value: "A2"},
+  {label: "DATA_PIN_A3", value: "A3"},
+  {label: "DATA_PIN_A4", value: "A4"},
+  {label: "DATA_PIN_A5", value: "A5"},
+  {label: "DATA_PIN_A6", value: "A6"},
 ];
 
-export default function AddPlant({ navigation }) {
+const power_pin = [
+  {label: "POWER_PIN_0", value: "0"},
+  {label: "POWER_PIN_1", value: "1"},
+  {label: "POWER_PIN_2", value: "2"},
+  {label: "POWER_PIN_3", value: "3"},
+  {label: "POWER_PIN_4", value: "4"},
+  {label: "POWER_PIN_5", value: "5"},
+  {label: "POWER_PIN_6", value: "6"},
+  {label: "POWER_PIN_7", value: "7"},
+  {label: "POWER_PIN_8", value: "8"},
+  {label: "POWER_PIN_9", value: "9"},
+];
+
+const data_DHT = [
+  {label: "DATA_0", value: "0"},
+  {label: "DATA_1", value: "1"},
+  {label: "DATA_2", value: "2"},
+  {label: "DATA_3", value: "3"},
+  {label: "DATA_4", value: "4"},
+  {label: "DATA_5", value: "5"},
+  {label: "DATA_6", value: "6"},
+  {label: "DATA_7", value: "7"},
+  {label: "DATA_8", value: "8"},
+  {label: "DATA_9", value: "9"},
+];
+
+const power_DHT = [
+  {label: "POWER_0", value: "0"},
+  {label: "POWER_1", value: "1"},
+  {label: "POWER_2", value: "2"},
+  {label: "POWER_3", value: "3"},
+  {label: "POWER_4", value: "4"},
+  {label: "POWER_5", value: "5"},
+  {label: "POWER_6", value: "6"},
+  {label: "POWER_7", value: "7"},
+  {label: "POWER_8", value: "8"},
+  {label: "POWER_9", value: "9"},
+];
+
+const vanne_DHT = [
+  {label: "VANNE_0", value: "0"},
+  {label: "VANNE_1", value: "1"},
+  {label: "VANNE_2", value: "2"},
+  {label: "VANNE_3", value: "3"},
+  {label: "VANNE_4", value: "4"},
+  {label: "VANNE_5", value: "5"},
+  {label: "VANNE_6", value: "6"},
+  {label: "VANNE_7", value: "7"},
+  {label: "VANNE_8", value: "8"},
+  {label: "VANNE_9", value: "9"},
+];
+
+export default function AddPlant({navigation, route}) {
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const {index, idRaspBerry} = route.params;
 
   let openImagePickerAsync = async () => {
     let permissionResult =
@@ -37,7 +100,7 @@ export default function AddPlant({ navigation }) {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [3, 1],
       quality: 1,
     });
 
@@ -51,9 +114,15 @@ export default function AddPlant({ navigation }) {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+  const [open5, setOpen5] = useState(false);
   const [value, setValue] = useState(null);
   const [value1, setValue1] = useState(null);
   const [value2, setValue2] = useState(null);
+  const [value3, setValue3] = useState(null);
+  const [value4, setValue4] = useState(null);
+  const [value5, setValue5] = useState(null);
   const [text, setText] = useState("");
   const [text1, setText1] = useState("");
   const [state, setState] = useState("");
@@ -65,24 +134,31 @@ export default function AddPlant({ navigation }) {
     setOpen(false);
   }, []);
 
+  const AddPlant = async (data) => {
+    try {
+      await set(ref(db, "raspberries/" + idRaspBerry + "/data/" + index), data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const confirmHandler = () => {
     const data = {
       controller: value,
       displayName: text,
-      humidity: 22,
-      moisture: 11,
+      humidity: [],
+      moisture: [],
       picture: "",
-      specie: "typePlant",
-      temperature: 40,
-      picture:
-        "https://asset.bloomnation.com/c_pad,d_vendor:global:catalog:product:image.png,f_auto,fl_preserve_transparency,q_auto/v1645689423/vendor/8567/catalog/product/2/0/20200304122155_file_5e5ef4a3ccb60_5e5ef7b7cd5fa.jpg",
+      specie: text1,
+      temperature: [],
+      id: new Date().getTime(),
     };
-    // ajouter a data base
+    AddPlant(data);
+    navigation.goBack();
   };
   return (
-    <View style={{ height: "100%", width: "100%" }}>
+    <ScrollView style={{height: "100%", width: "100%"}}>
       <View
-        style={{ justifyContent: "center", alignItems: "center", marginTop: 20 }}
+        style={{justifyContent: "center", alignItems: "center", marginTop: 20}}
       >
         <TouchableOpacity
           style={{
@@ -97,8 +173,8 @@ export default function AddPlant({ navigation }) {
         >
           {selectedImage ? (
             <Image
-              source={{ uri: selectedImage }}
-              style={{ borderRadius: 50, width: 100, height: 100 }}
+              source={{uri: selectedImage}}
+              style={{borderRadius: 50, width: 100, height: 100}}
               resizeMode="contain"
             />
           ) : (
@@ -107,18 +183,19 @@ export default function AddPlant({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#",
+            backgroundColor: COLORS.GREEN,
+            position: "absolute",
+            bottom: "10%",
+            right: "38%",
             borderRadius: 50,
             width: 25,
             height: 25,
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={openImagePickerAsync}
         >
-          {/* <Image
-            source={require("../../assets/select.png")}
-            resizeMode="contain"
-          ></Image> */}
+          <Image source={require("../../assets/select.png")}></Image>
         </TouchableOpacity>
       </View>
 
@@ -134,7 +211,7 @@ export default function AddPlant({ navigation }) {
           General
         </Text>
         <View>
-          <Text style={{ marginLeft: 20 }}>Name</Text>
+          <Text style={{marginLeft: 20}}>Name</Text>
           <TextInput
             onChangeText={(text) => setText(text.trim())}
             value={text}
@@ -150,14 +227,14 @@ export default function AddPlant({ navigation }) {
             }}
             underlineColorAndroid="transparent"
             autoCapitalize="none"
-            placeholder="Lorem Ipsum"
+            placeholder="Enter your name"
             multiline={false}
             textAlign="left"
             textBreakStrategy="highQuality"
           />
         </View>
         <View>
-          <Text style={{ marginLeft: 20 }}>Specie</Text>
+          <Text style={{marginLeft: 20}}>Specie</Text>
           <TextInput
             onChangeText={(text1) => setText1(text1.trim())}
             value={text1}
@@ -173,14 +250,12 @@ export default function AddPlant({ navigation }) {
             }}
             underlineColorAndroid="transparent"
             autoCapitalize="none"
-            placeholder="Lorem Ipsum"
+            placeholder="Enter your specie"
             multiline={false}
             textAlign="left"
             textBreakStrategy="highQuality"
           />
         </View>
-        {console.log(text)}
-        {console.log(text1)}
         <Text
           style={{
             fontWeight: "bold",
@@ -189,11 +264,10 @@ export default function AddPlant({ navigation }) {
             marginLeft: (windowWidth * 5) / 100,
           }}
         >
-          Hardware
+          Soil Moisture
         </Text>
-
         <View style={{}}>
-          <Text style={{ marginLeft: 20 }}>Controller</Text>
+          <Text style={{marginLeft: 20}}>POWER_PIN</Text>
           <DropDownPicker
             style={{
               marginTop: 3,
@@ -205,6 +279,7 @@ export default function AddPlant({ navigation }) {
             zIndex={3000}
             zIndexInverse={1000}
             onOpen={onFitemOpen}
+            placeholder="Select your POWER_PIN"
             dropDownContainerStyle={{
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
@@ -213,17 +288,17 @@ export default function AddPlant({ navigation }) {
               borderColor: "#E3E3E3",
             }}
             value={value}
-            items={items}
+            items={power_pin}
             setOpen={setOpen}
             setValue={setValue}
           />
         </View>
 
         <View style={{}}>
-          <Text style={{ marginLeft: 20 }}>Moisture Sensor</Text>
+          <Text style={{marginLeft: 20}}>DATA_PIN</Text>
           <DropDownPicker
             style={{
-              marginTop: 3,
+              marginTop: 10,
               borderColor: "#E3E3E3",
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
@@ -242,11 +317,11 @@ export default function AddPlant({ navigation }) {
               backgroundColor: "#f80000",
             }}
             dropDownDirection="BOTTOM"
-            listMode="FLATLIST"
             onOpen={onSitemOpen}
+            placeholder="Select your DATA_PIN"
             open={open1}
             value={value1}
-            items={items}
+            items={data_Pin}
             setOpen={setOpen1}
             setValue={setValue1}
             zIndex={2000}
@@ -254,20 +329,30 @@ export default function AddPlant({ navigation }) {
           />
         </View>
 
-        {/* <View>
-          <Text style={{marginLeft: 20}}>Pin Number</Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 25,
+            margin: 5,
+            marginLeft: (windowWidth * 5) / 100,
+          }}
+        >
+          DHT
+        </Text>
+        <View style={{}}>
+          <Text style={{marginLeft: 20}}>DATA</Text>
           <DropDownPicker
             style={{
-              borderColor: "#E3E3E3",
               marginTop: 3,
+              borderColor: "#E3E3E3",
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
             }}
             open={open2}
-            value={value2}
-            items={items}
-            setOpen={setOpen2}
-            setValue={setValue2}
+            zIndex={3000}
+            zIndexInverse={1000}
+            // onOpen={onFitemOpen}
+            placeholder="Select your DATA"
             dropDownContainerStyle={{
               width: (windowWidth * 90) / 100,
               margin: (windowWidth * 5) / 100,
@@ -275,10 +360,94 @@ export default function AddPlant({ navigation }) {
               marginTop: 0,
               borderColor: "#E3E3E3",
             }}
-            zIndex={1000}
-            zIndexInverse={3000}
+            value={value2}
+            items={data_DHT}
+            setOpen={setOpen2}
+            setValue={setValue2}
           />
-        </View> */}
+        </View>
+
+        <View style={{}}>
+          <Text style={{marginLeft: 20}}>POWER</Text>
+          <DropDownPicker
+            style={{
+              marginTop: 10,
+              borderColor: "#E3E3E3",
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+            }}
+            dropDownContainerStyle={{
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+              maxHeight: (windowHeight * 10) / 100,
+              marginTop: 0,
+              borderColor: "#E3E3E3",
+            }}
+            scrollViewProps={{
+              decelerationRate: "fast",
+            }}
+            modalContentContainerStyle={{
+              backgroundColor: "#f80000",
+            }}
+            dropDownDirection="BOTTOM"
+            placeholder="Select your POWER"
+            open={open3}
+            value={value3}
+            items={power_DHT}
+            setOpen={setOpen3}
+            setValue={setValue3}
+            zIndex={2000}
+            zIndexInverse={2000}
+          />
+        </View>
+
+        <View style={{}}>
+          <Text style={{marginLeft: 20}}>VANNE</Text>
+          <DropDownPicker
+            style={{
+              marginTop: 10,
+              borderColor: "#E3E3E3",
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+            }}
+            dropDownContainerStyle={{
+              width: (windowWidth * 90) / 100,
+              margin: (windowWidth * 5) / 100,
+              maxHeight: (windowHeight * 10) / 100,
+              marginTop: 0,
+              borderColor: "#E3E3E3",
+            }}
+            scrollViewProps={{
+              decelerationRate: "fast",
+            }}
+            modalContentContainerStyle={{
+              backgroundColor: "#f80000",
+            }}
+            dropDownDirection="BOTTOM"
+            onOpen={onSitemOpen}
+            placeholder="Select your VANNE"
+            open={open4}
+            value={value4}
+            items={vanne_DHT}
+            setOpen={setOpen4}
+            setValue={setValue4}
+          />
+        </View>
+      </View>
+      <View style={{height: 150}}>
+        <TouchableOpacity onPress={navigation.navigate("Help")}>
+          <Text
+            style={{
+              color: COLORS.RED,
+              fontSize: 16,
+              fontWeight: "700",
+              textAlign: "right",
+              marginHorizontal: 30,
+            }}
+          >
+            help?
+          </Text>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -294,6 +463,7 @@ export default function AddPlant({ navigation }) {
         }}
       >
         <TouchableOpacity
+          onPress={() => confirmHandler()}
           style={{
             backgroundColor: "rgba(7, 215, 121, 0.5)",
             margin: 10,
@@ -339,7 +509,7 @@ export default function AddPlant({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

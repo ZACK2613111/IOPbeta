@@ -50,9 +50,13 @@ export default function PlantCard({
         <Image
           resizeMode="contain"
           style={{width: "100%", height: 100}}
-          source={{
-            uri: img,
-          }}
+          source={
+            img
+              ? {
+                  uri: img,
+                }
+              : require("../../assets/Group.png")
+          }
         />
         <Text style={{color: COLORS.GREEN, fontWeight: "bold", fontSize: 16}}>
           {name}

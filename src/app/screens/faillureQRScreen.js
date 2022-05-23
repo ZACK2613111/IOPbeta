@@ -1,15 +1,24 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import {View, Text, StyleSheet, TouchableOpacity, Image} from "react-native";
+import React from "react";
 
-export default function faillureQR({ navigation }) {
+export default function FaillureQR({navigation}) {
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', height: '100%' }}>
-
-      <Image source={require('../../assets/images/faillureQRcode.png')} style={{ marginTop: '20%', marginLeft: '25%' }} />
+    <View
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        height: "100%",
+      }}
+    >
+      <Image
+        source={require("../../assets/images/faillureQRcode.png")}
+        style={{marginTop: "20%", marginLeft: "25%"}}
+      />
       <TouchableOpacity
         style={{
           backgroundColor: "#FF5454",
-          width: '60%',
+          width: "60%",
           margin: 10,
           borderRadius: 10,
           justifyContent: "center",
@@ -17,7 +26,7 @@ export default function faillureQR({ navigation }) {
           marginTop: 60,
           marginBottom: 130,
         }}
-        onPress={() => { }}
+        onPress={() => {}}
       >
         <Text
           style={{
@@ -31,9 +40,7 @@ export default function faillureQR({ navigation }) {
         </Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});

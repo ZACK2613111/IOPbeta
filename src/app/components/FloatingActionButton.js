@@ -2,12 +2,15 @@ import React, {useState, useEffect} from "react";
 import {View, StyleSheet, TouchableOpacity, Text, Animated} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import COLORS from "../../data/colors";
-import {NavigationContainer} from "@react-navigation/native";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 
 const buttonSize = 50;
 
-const FloatingActionButton = ({navigation, setDisplayDelete}) => {
+const FloatingActionButton = ({
+  navigation,
+  setDisplayDelete,
+  idRaspBerry,
+  index,
+}) => {
   const [pressed, setPressed] = useState(false);
   const [active, setActive] = useState(false);
   const [animation] = useState(new Animated.Value(1));
@@ -16,7 +19,7 @@ const FloatingActionButton = ({navigation, setDisplayDelete}) => {
     {
       title: "Add",
       onPress: () => {
-        navigation.navigate("Addplant");
+        navigation.navigate("Addplant", {index, idRaspBerry});
       },
       nameIcon: "plus",
     },
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: buttonSize / 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.GREEN,
     shadowOpacity: 0.25,
     shadowOffset: {height: 0.5, width: 0.5},
     elevation: 5,
