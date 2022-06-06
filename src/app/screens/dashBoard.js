@@ -46,9 +46,16 @@ export default function Screen1({ navigation, infos, plantSeches }) {
           <Weatherbar input={adr} />
         </View>
 
-        <View style={{ flexDirection: "row", marginLeft: 22 }}>
-          <Donutchart p={waterLevel} c={"#3155A1"} />
-          <Donutchart p={plantSeches} c={"#07D779"} />
+        <View style={{ flexDirection: "row", marginLeft: 22, marginBottom: '5%' }}>
+          <View style={{ alignItems: 'center' }}>
+            <Donutchart p={waterLevel} c={"#3155A1"} />
+            <Text style={{ fontFamily: 'CircularStd-Medium', fontSize: 18, color: '#00000080' }}>Water level</Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Donutchart p={plantSeches} c={"#07D779"} />
+
+            <Text style={{ fontFamily: 'CircularStd-Medium', fontSize: 18, color: '#00000080' }}>Dry plants</Text>
+          </View>
         </View>
 
         <View style={styles.cardArrosage}>
